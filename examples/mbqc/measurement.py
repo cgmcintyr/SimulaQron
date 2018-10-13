@@ -2,7 +2,7 @@ from SimulaQron.general.hostConfig import *
 from SimulaQron.cqc.backend.cqcHeader import *
 from SimulaQron.cqc.pythonLib.cqc import *
 
-import time
+import sys
 
 from collections import Iterable
 from copy import deepcopy
@@ -56,6 +56,7 @@ def _convert(obj, gates, qubits, qubit_count):
         )
     else:
         print("ERROR {}".format(gate))
+        sys.exit(1)
 
     obj["gates"] += new_gates
     obj["qubits"][0] += new_qubits[0]

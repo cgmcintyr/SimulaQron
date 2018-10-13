@@ -8,21 +8,7 @@ from collections import Iterable
 from copy import deepcopy
 from itertools import chain
 
-expected = {
-    "gates": ["E", "M", "X"],
-    "qubits": [[2, 2, 3, 1, 3, 3, 4], [3, 0, 0, 3, 4, 0, 0]],
-    "conditions": [ 0, 0, 2 ]
-}
-
-original = {
-    "gates": ["CZ", "H"],
-    "qubits": [ [1, 2], [2, 0] ],
-}
-
-original = {
-    "gates": ["H", "H"],
-    "qubits": [[1, 1], [0, 0]],
-}
+import circuit
 
 def flatten(ls):
     def func(x):
@@ -86,4 +72,10 @@ def convert(operations):
 
     return operations
 
-print(convert(original))
+if __name__ == "__main__":
+    qubit_count, gates, qubits = circuit.load('./circuits/circuit1.json')
+    d = {
+        "gates": gates,
+        "qubits": qubits
+    }
+    print(convert(d))

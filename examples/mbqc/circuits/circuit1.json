@@ -12,13 +12,8 @@
 		},
 		{
 			"name": "g3",
-			"type": "X",
-			"qbits": ["3"]
-		},
-		{
-			"name": "g4",
-			"type": "CZ",
-			"qbits": ["3", "2"]
+			"type": "H",
+			"qbits": ["1"]
 		}
 	]
 }

@@ -10,72 +10,66 @@ from itertools import chain
 
 import circuit
 
-def flatten(ls):
-    def func(x):
-        if isinstance(x, Iterable) and not isinstance(x, str): 
-            return x
-        return [x]
-    return list(chain.from_iterable(func(x) for x in ls))
 
-def convert(operations):
-    operations = deepcopy(operations)
-    operation_count = len(operations["gates"])
-    hightest_qubit = max(list({ qubit for qubit in chain(*operations["qubits"])}))
+def _convert_gate_h(q1, q2, qubit_count):
+    new_qubit = qubit_count + 1
+    qubits = [[q1, q1, new_qubit], [new_qubit, 0, 0]]
+    gates = ["E", "M", "X"]
+    conditions = [0, 0, q1]
+    return gates, qubits, conditions, new_qubit
 
-    for op in range(operation_count):
-        gate = operations["gates"][op]
-        qubit1 = operations["qubits"][0][op]
-        qubit2 = operations["qubits"][1][op]
 
-        if gate == "H":
-            operates_on = operations["qubits"][0][op]
+def _convert_gate_cz(q1, q2, qubit_count):
+    qubits = [[q1], [q2]]
+    gates = ["E"]
+    conditions = [0]
+    return gates, qubits, conditions, qubit_count
 
-            # Replace gates
-            new_gates =  ["E", "M", "X"]
-            operations["gates"][op] = new_gates
 
-            # Replace qubits
-            hightest_qubit += 1 # We need a new qubit
-            new_qubits = [
-                [operates_on, operates_on, hightest_qubit],
-                [hightest_qubit, 0, 0,]
-            ]
-            operations["qubits"][0][op] = new_qubits[0]
-            operations["qubits"][1][op] = new_qubits[1]
+def _replace_qubit(qubits, old, new):
+    qubits = deepcopy(qubits)
+    for i, qubits_list in enumerate(qubits):
+        for j, qubit in enumerate(qubits_list):
+            if qubit == old:
+                qubits[i][j] = new
+    return qubits
 
-            # Replace all references to old qubit with new post-hadamard qubit
-            for i, qubits_list in enumerate(operations["qubits"]):
-                for j, qubit in enumerate(qubits_list[op:]):
-                    if qubit == operates_on:
-                        operations["qubits"][i][j] = hightest_qubit
 
-            # New conditions/output
-            new_conditions = [0,0,operates_on]
-            conditions = operations.get("conditions", None)
-            if not conditions:
-                operations["conditions"] = new_conditions
-            else:
-                operations["conditions"].append(new_conditions)
-        elif gate == "CZ":
-            operations["gates"][op] = "E"
-            conditions = operations.get("conditions", None)
-            if not conditions:
-                operations["conditions"] = [0]
-            else:
-                operations["conditions"].append(0)
+def _convert(obj, gates, qubits, qubit_count):
+    if len(gates) == 0:
+        return obj
 
-    for i, row in enumerate(operations["qubits"]):
-        operations["qubits"][i] = flatten(row)
+    gate = gates.pop(0)
+    q1 = qubits[0].pop(0)
+    q2 = qubits[1].pop(0)
 
-    operations["gates"] = flatten(operations["gates"])
-    operations["conditions"] = flatten(operations["conditions"])
+    if gate == "H":
+        new_gates, new_qubits, new_conditions, new_qubit_count = _convert_gate_h(
+            q1, q2, qubit_count
+        )
+        if new_qubit_count != qubit_count:
+            qubits = _replace_qubit(qubits, q1, new_qubit_count)
+            qubit_count = new_qubit_count
+    elif gate == "CZ":
+        new_gates, new_qubits, new_conditions, new_qubit_count = _convert_gate_cz(
+            q1, q2, qubit_count
+        )
+    else:
+        print("ERROR {}".format(gate))
 
-    return operations
+    obj["gates"] += new_gates
+    obj["qubits"][0] += new_qubits[0]
+    obj["qubits"][1] += new_qubits[1]
+    obj["conditions"] += new_conditions
+    return _convert(obj, gates, qubits, qubit_count)
+
+
+def convert(gates, qubits, qubit_count):
+    empty = {"gates": [], "qubits": [[], []], "conditions": []}
+    return _convert(empty, gates, qubits, qubit_count)
+
 
 if __name__ == "__main__":
-    qubit_count, gates, qubits = circuit.load('./circuits/circuit1.json')
-    d = {
-        "gates": gates,
-        "qubits": qubits
-    }
-    print(convert(d))
+    qubit_count, gates, qubits = circuit.load("./circuits/circuit1.json")
+    d = {"gates": gates, "qubits": qubits}
+    print(convert(gates, qubits, qubit_count))

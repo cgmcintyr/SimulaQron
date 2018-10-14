@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-ALL_PIDS=$(ps aux | grep python | grep -E "Test|setup|start" | awk {'print $2'})
+ALL_PIDS=$(ps aux | grep python | grep -E "Test|setup|start|server|client" | awk {'print $2'})
 if [ "$ALL_PIDS" != "" ]
 then
         kill -9 $ALL_PIDS

@@ -26,6 +26,20 @@ def _convert_gate_cz(q1, q2, qubit_count):
     return gates, qubits, conditions, qubit_count
 
 
+def _convert_gate_x(q1, q2, qubit_count):
+    qubits = [[q1], [0]]
+    gates = ["X"]
+    conditions = [0]
+    return gates, qubits, conditions, qubit_count
+
+
+def _convert_gate_z(q1, q2, qubit_count):
+    qubits = [[q1], [0]]
+    gates = ["Z"]
+    conditions = [0]
+    return gates, qubits, conditions, qubit_count
+
+
 def _replace_qubit(qubits, old, new):
     qubits = deepcopy(qubits)
     for i, qubits_list in enumerate(qubits):
@@ -54,6 +68,23 @@ def _convert(obj, gates, qubits, qubit_count):
         new_gates, new_qubits, new_conditions, new_qubit_count = _convert_gate_cz(
             q1, q2, qubit_count
         )
+    elif gate == "X":
+        new_gates, new_qubits, new_conditions, new_qubit_count = _convert_gate_x(
+            q1, q2, qubit_count
+        )
+    elif gate == "Z":
+        new_gates, new_qubits, new_conditions, new_qubit_count = _convert_gate_z(
+            q1, q2, qubit_count
+        )
+    elif gate == "CX":
+        # Defer conversion to next iterations
+        gates += ["H", "CZ", "H"]
+        qubits[0] += [q2, q1, q2]
+        qubits[1] += [0, q2, 0]
+
+        new_gates = []
+        new_conditions = []
+        new_qubits = [[], []]
     else:
         print("ERROR {}".format(gate))
         sys.exit(1)
@@ -71,7 +102,7 @@ def convert(gates, qubits, qubit_count):
 
 
 if __name__ == "__main__":
-    qubit_count, gates, qubits = circuit.load("./circuits/circuit1.json")
+    qubit_count, gates, qubits = circuit.load("./circuits/circuit2.json")
     result = convert(gates, qubits, qubit_count)
     gates = result["gates"]
     qubits = result["qubits"]

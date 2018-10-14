@@ -1,0 +1,40 @@
+\documentclass[10pts, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{algorithm,algorithmicx,algpseudocode}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage{braket}
+\usepackage{cryptocode}
+\usepackage[english]{babel}
+\setlength{\parindent}{4 em}
+\setlength{\parskip}{1 em}
+\renewcommand{\baselinestretch}{1.0}
+\usepackage[margin=1.0in]{geometry}
+\usepackage{float}
+\floatstyle{boxed} 
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage[superscript, biblabel, nomove]{cite}
+\usepackage{mathtools}
+\title{ \begin{large}
+\textbf{Flow Construction}
+\end{large} 
+}
+%\author{}
+%document
+\date{}
+\begin{document}
+\maketitle
+Interpret Flow notations MBQC as follows. There are four kinds of outputs:
+\begin{itemize}
+\item E [i,j]: entangle qubits i and j using Controlled Phase. 
+\item M i $\phi$ [m] [n]: Measurement angle for qubit i is $\alpha=(-1)^{\textnormal{(m mod 2)}}\phi+n\pi$
+\item X j i: Operation of conditional X on qubit j depending on measurement outcome of qubit i
+\item Z j i: Operation of conditional Z on qubit j depending on measurement outcome of qubit i
+\item X's and Z's can be accommodated in mesurement angle as such: $M_j^\alpha X_j^i Z_j^k$: Measurement angle of qubit $j=(-1)^{s_i} \alpha+s_k\pi$, where $s_i$, $s_k$ are the measurement outcomes of qubits i and k respectively.
+\end{itemize}
+\end{document}
+
+
+
+

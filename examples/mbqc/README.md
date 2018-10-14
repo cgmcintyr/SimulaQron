@@ -1,4 +1,6 @@
-# Interpret Flow notations MBQC as follows. There are four kinds of outputs:
+# MBQC
+
+Interpret Flow notations MBQC as follows. There are four kinds of outputs:
 
 * E [i,j]: entangle qubits i and j using Controlled Phase. 
 * M i <img src="./docs/svgs/f50853d41be7d55874e952eb0d80c53e.svg" align=middle width=9.794565000000006pt height=22.831379999999992pt/> [m] [n]: Measurement angle for qubit i is <img src="./docs/svgs/5fc34debe9fe8c2254296f70d46bf923.svg" align=middle width=178.268805pt height=29.19113999999999pt/>

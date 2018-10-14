@@ -2,13 +2,12 @@ from SimulaQron.general.hostConfig import *
 from SimulaQron.cqc.backend.cqcHeader import *
 from SimulaQron.cqc.pythonLib.cqc import *
 
+import json
 import sys
 
 from collections import Iterable
 from copy import deepcopy
 from itertools import chain
-
-import circuit
 
 
 def _convert_gate_h(q1, q2, qubit_count):
@@ -49,7 +48,7 @@ def _replace_qubit(qubits, old, new):
     return qubits
 
 
-def _convert(obj, gates, qubits, qubit_count):
+def _convert_to_measurements(obj, gates, qubits, qubit_count):
     if len(gates) == 0:
         return obj
 
@@ -93,17 +92,42 @@ def _convert(obj, gates, qubits, qubit_count):
     obj["qubits"][0] += new_qubits[0]
     obj["qubits"][1] += new_qubits[1]
     obj["conditions"] += new_conditions
-    return _convert(obj, gates, qubits, qubit_count)
+    return _convert_to_measurements(obj, gates, qubits, qubit_count)
 
 
-def convert(gates, qubits, qubit_count):
+def convert_to_measurements(gates, qubits, qubit_count):
     empty = {"gates": [], "qubits": [[], []], "conditions": []}
-    return _convert(empty, gates, qubits, qubit_count)
+    return _convert_to_measurements(empty, gates, qubits, qubit_count)
+
+
+def load_circuit(path):
+    with open(path, "r") as circ:
+        circuit = json.load(circ)
+    nGates = len(circuit["gates"])
+    gates = []
+    qubits = []
+    qubits_1 = []
+    qubits_2 = []
+    for g in range(0, nGates):
+        qubits = qubits + circuit["gates"][g]["qbits"]
+        qubits_1 = qubits_1 + [int(circuit["gates"][g]["qbits"][0])]
+        if len(circuit["gates"][g]["qbits"]) == 1:
+            qubits_2 = qubits_2 + [0]
+        else:
+            qubits_2 = qubits_2 + [int(circuit["gates"][g]["qbits"][1])]
+        gates = gates + [circuit["gates"][g]["type"]]
+
+    nqbits = len(set(qubits))
+    return gates, [qubits_1, qubits_2], nqbits
+
+
+def load_and_convert_circuit(path):
+    circuit = load_circuit(path)
+    return convert_to_measurements(*circuit)
 
 
 if __name__ == "__main__":
-    qubit_count, gates, qubits = circuit.load("./circuits/circuit2.json")
-    result = convert(gates, qubits, qubit_count)
+    result = load_and_convert_circuit("./circuits/circuit1.json")
     gates = result["gates"]
     qubits = result["qubits"]
     conditions = result["conditions"]

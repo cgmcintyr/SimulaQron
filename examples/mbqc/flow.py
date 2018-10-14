@@ -1,6 +1,5 @@
 import numpy as np
-from measurement import convert
-import circuit
+from measurement import load_and_convert_circuit
 from copy import deepcopy
 
 
@@ -133,8 +132,7 @@ def count_qubits_in_sequence(seq):
 
 
 def circuit_file_to_flow(path):
-    qubit_count, gates, qubits = circuit.load(path)
-    result = convert(gates, qubits, qubit_count)
+    result = load_and_convert_circuit(path)
     seq_in = _measurement_dictionary_to_sequence(result)
     seq_out = _construct_flow_from_sequence(seq_in)
     return seq_out

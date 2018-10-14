@@ -1,11 +1,10 @@
 # Interpret Flow notations MBQC as follows. There are four kinds of outputs:
 
 * E [i,j]: entangle qubits i and j using Controlled Phase. 
-* M i <img src="./docs/svgs/f50853d41be7d55874e952eb0d80c53e.svg" align=middle width=9.794565000000006pt height=22.831379999999992pt/> [m] [n]: Measurement angle for qubit i is <p align="center"><img src="./docs/svgs/735e8de2fd41b658155c484dad1d35d9.svg" align=middle width=178.2693pt height=19.526925pt/></p>
+* M i <img src="./docs/svgs/f50853d41be7d55874e952eb0d80c53e.svg" align=middle width=9.794565000000006pt height=22.831379999999992pt/> [m] [n]: Measurement angle for qubit i is <img src="./docs/svgs/5fc34debe9fe8c2254296f70d46bf923.svg" align=middle width=178.268805pt height=29.19113999999999pt/>
 * X j i: Operation of conditional X on qubit j depending on measurement outcome of qubit i
 * Z j i: Operation of conditional Z on qubit j depending on measurement outcome of qubit i
-* X's and Z's can be accommodated in mesurement angle as such: <p align="center"><img src="./docs/svgs/005752769365b80b615b7759adcc1e7f.svg" align=middle width=67.31604pt height=21.07941pt/></p>: Measurement angle of qubit <p align="center"><img src="./docs/svgs/2d626711053a6cd4497bb9137817e32a.svg" align=middle width=132.073095pt height=16.438356pt/></p>, where <p align="center"><img src="./docs/svgs/330c76e2bed5ef9884b787c69a74bfb4.svg" align=middle width=12.3563715pt height=9.5433525pt/></p>, <p align="center"><img src="./docs/svgs/dcd583c614e714f274ddf2d2b531621b.svg" align=middle width=14.971505999999998pt height=9.5433525pt/></p> are the measurement outcomes of qubits i and k respectively.
-\end{itemize}
+* X's and Z's can be accommodated in mesurement angle as such: <img src="./docs/svgs/17de0d63787245126004f04d9b080bea.svg" align=middle width=67.31604pt height=27.91271999999999pt/>: Measurement angle of qubit <img src="./docs/svgs/3369485e5fd1f281f6f6a547fa661280.svg" align=middle width=132.07309499999997pt height=24.65759999999998pt/>, where <img src="./docs/svgs/4fa3ac8fe93c68be3fe7ab53bdeb2efa.svg" align=middle width=12.356520000000005pt height=14.155350000000013pt/>, <img src="./docs/svgs/59efeb0f4f5d484a9b8a404d5bdac544.svg" align=middle width=14.971605000000004pt height=14.155350000000013pt/> are the measurement outcomes of qubits i and k respectively.
 
 ## Circuit JSON Documentation
 

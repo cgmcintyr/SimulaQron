@@ -4,7 +4,8 @@ from SimulaQron.general.hostConfig import *
 from SimulaQron.cqc.backend.cqcHeader import *
 from SimulaQron.cqc.pythonLib.cqc import *
 #from SimulaQron.cqc.pythonLib.cqc import CQCConnection, CQCNoQubitError
-
+import time
+import struct
 
 qubits = []
 num_measurements=4
@@ -34,14 +35,21 @@ with CQCConnection("server") as Server:
 	print(E2)
 	#entangle qubits
 	for i, j in zip(E1, E2):
-		qubits[i].cphase(qubits[j])
+                print("i: {}, j: {}".format(i,j))
+                qubit_i = qubits[i - 1]
+                qubit_j = qubits[j - 1]
+                qubit_i.cphase(qubit_j)
 
 	
-	
-	for i in range(num_measurements):
-		idx, angle = Server.recvClassical()
-		qubits[idx].rot_Z(angle)
-		m = qubits[idx].measure()
+	nMeasurement=int.from_bytes(nMeasurement,byteorder='little')
+	for i in range(nMeasurement):
+		qubit_n=int.from_bytes(Server.recvClassical(),'little')
+		angle=int.from_bytes(Server.recvClassical(),'little')
+		print ("qubit to measure", qubit_n)
+		print ("angle of measurement", angle)
+		qubits[qubit_n].rot_Z(angle)
+		m = qubits[qubit_n].measure()
+		time.sleep(1)
 		Server.sendClassical('client', m)
 	
 	

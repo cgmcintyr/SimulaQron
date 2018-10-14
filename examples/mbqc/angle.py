@@ -1,4 +1,5 @@
-def measure_angle(i, outcome_array, input_angle, computation_angle):
+import numpy as np
+def measure_angle(i, seq, outcome_array, input_angle, computation_angle):
     """Angle to measrue qubit i
 
     :i: qubit to measure
@@ -10,7 +11,7 @@ def measure_angle(i, outcome_array, input_angle, computation_angle):
     s = 0
     for gate in seq:
         if gate.type == "X" and gate.qubit == i:
-            c += outcome_arrray[i]
+            c += 0 if outcome_array[i] < 0 else outcome_array[i]
         elif gate.type == "Z" and gate.qubit == i:
-            s += outcome_arrray[i]
-    return input_angle + (((-1) ** c) * computation_angle) + (s * Math.pi)
+            s += 0 if outcome_array[i] < 0 else outcome_array[i]
+    return input_angle + (((-1) ** c) * (computation_angle)) + (s * 128)

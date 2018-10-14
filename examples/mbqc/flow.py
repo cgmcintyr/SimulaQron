@@ -120,6 +120,18 @@ def _construct_flow_from_sequence(seq):
     return seq
 
 
+def count_cubits_in_sequence(seq):
+    qubits = set()
+    for gate in seq:
+        try:
+            qubit_pair = gate.qubits
+            qubits.add(qubit_pair[0])
+            qubits.add(qubit_pair[1])
+        except AttributeError:
+            qubits.add(gate.qubit)
+    return len(qubits)
+
+
 def circuit_file_to_flow(path):
     qubit_count, gates, qubits = circuit.load("./circuits/circuit2.json")
     result = convert(gates, qubits, qubit_count)
@@ -130,6 +142,8 @@ def circuit_file_to_flow(path):
 
 if __name__ == "__main__":
     seq_out = circuit_file_to_flow("./circuits/circuit2.json")
+    qubits_needed = count_cubits_in_sequence(seq_out)
+    print("qubits needed: {}".format(qubits_needed))
     print("----- out -----")
     for s in seq_out:
         s.printinfo()

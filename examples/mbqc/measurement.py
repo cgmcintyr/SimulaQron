@@ -127,10 +127,11 @@ def load_and_convert_circuit(path):
 
 
 if __name__ == "__main__":
-    result = load_and_convert_circuit("./circuits/circuit1.json")
+    result = load_and_convert_circuit("./circuits/circuit2.json")
     gates = result["gates"]
     qubits = result["qubits"]
     conditions = result["conditions"]
-    print("gates: {}".format(gates))
-    print("qubits: {}".format(qubits))
+    print("gates     :  {}".format(', '.join(gates)))
+    print("qubits1   : {}".format(qubits[0]))
+    print("qubits2   : {}".format(qubits[1]))
     print("conditions: {}".format(conditions))

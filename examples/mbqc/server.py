@@ -34,7 +34,7 @@ with CQCConnection("server") as Server:
 	print(E2)
 	#entangle qubits
 	for i, j in zip(E1, E2):
-		qubits[i].CPHASE(qubits[j])
+		qubits[i].cphase(qubits[j])
 
 	
 	

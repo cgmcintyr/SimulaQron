@@ -6,6 +6,7 @@ import random
 #from SimulaQron.virtnode.crudeSimulator.simpleEngine import *
 
 from flow import circuit_file_to_flow, count_qubits_in_sequence
+from angle import measurment_angle
 
 
 seq_out = circuit_file_to_flow("./circuits/circuit1.json")
@@ -32,6 +33,7 @@ print(E1, E2)
 
 print("Qubit number=", nQubits)
 
+
 # Initialize the connection
 with CQCConnection("client") as client:
 	client.sendClassical('server', nQubits)
@@ -48,6 +50,15 @@ with CQCConnection("client") as client:
 	client.sendClassical('server', nMeasurement)
 	client.sendClassical('server', E1)
 	client.sendClassical('server', E2)
+	for s in seq_out:
+		if s.type=="M":
+			client.sendClassical('server', s.qubit)
+			client.sendClassical('server', s.angle)
+			
+			
+		#s.qubit
+
+	
 	
 		#m=q.measure()
 	

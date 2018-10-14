@@ -2,7 +2,7 @@
 	"gates": [{
 			"name": "g1",
 			"type": "H",
-			"qbits": ["1"]
+			"qbits": ["2"]
 
 		},
 		{
@@ -13,7 +13,7 @@
 		{
 			"name": "g3",
 			"type": "H",
-			"qbits": ["1"]
+			"qbits": ["2"]
 		}
 	]
 }

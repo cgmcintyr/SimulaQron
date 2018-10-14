@@ -100,14 +100,14 @@ def _construct_flow_from_sequence(seq):
                 continue
             elif seq[i - 1].type == "X":
                 # print('condition X++')
-                seq[i].X_idxs.append(seq[i-1].qubit)
+                seq[i].X_idxs.append(seq[i - 1].power_idx)
                 del seq[i - 1]
                 N = len(seq)
                 i = i - 1
                 continue
             elif seq[i - 1].type == "Z":
                 # print('condition Z++')
-                seq[i].Z_idxs.append(seq[i-1].qubit)
+                seq[i].Z_idxs.append(seq[i - 1].power_idx)
                 del seq[i - 1]
                 N = len(seq)
                 i = i - 1

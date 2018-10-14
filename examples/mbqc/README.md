@@ -28,3 +28,17 @@ The file contains a single JSON object:
 | name   | string                  | name of gate to be created (does not have to be unique)                        |
 | type   | string                  | "H", "CZ", "CX", "Z", or "X" (no other gates supported)                        |
 | qubits | list of strings or ints | lists qubits the gate is applied to (2nd qubit is not necessary for H, X or Z) |
+
+
+## Running example
+
+```bash
+git clone https://github.com/cgmcintyr/SimulaQron.git
+cd SimulaQron
+export PYTHONPATH=$(pwd):$PYTHONPATH
+export NETSIM=$(pwd)
+./run/startAll.sh
+cd examples/mbqc/
+python sever.py &
+python client.py
+```

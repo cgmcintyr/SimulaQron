@@ -2,7 +2,7 @@
 ALL_PIDS=$(ps aux | grep python | grep -E "Test|setup|start|server|client" | awk {'print $2'})
 if [ "$ALL_PIDS" != "" ]
 then
-        kill -9 $ALL_PIDS
+        sudo kill -9 $ALL_PIDS
 fi       
 
 # if no arguments were given we take the list of current Nodes

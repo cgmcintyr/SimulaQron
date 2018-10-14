@@ -72,5 +72,10 @@ def convert(gates, qubits, qubit_count):
 
 if __name__ == "__main__":
     qubit_count, gates, qubits = circuit.load("./circuits/circuit1.json")
-    d = {"gates": gates, "qubits": qubits}
-    print(convert(gates, qubits, qubit_count))
+    result = convert(gates, qubits, qubit_count)
+    gates = result["gates"]
+    qubits = result["qubits"]
+    conditions = result["conditions"]
+    print("gates: {}".format(gates))
+    print("qubits: {}".format(qubits))
+    print("conditions: {}".format(conditions))

@@ -120,7 +120,7 @@ def _construct_flow_from_sequence(seq):
     return seq
 
 
-def count_cubits_in_sequence(seq):
+def count_qubits_in_sequence(seq):
     qubits = set()
     for gate in seq:
         try:
@@ -142,7 +142,7 @@ def circuit_file_to_flow(path):
 
 if __name__ == "__main__":
     seq_out = circuit_file_to_flow("./circuits/circuit2.json")
-    qubits_needed = count_cubits_in_sequence(seq_out)
+    qubits_needed = count_qubits_in_sequence(seq_out)
     print("qubits needed: {}".format(qubits_needed))
     print("----- out -----")
     for s in seq_out:

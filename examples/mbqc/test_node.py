@@ -5,6 +5,8 @@ import numpy as np
 import random
 #from SimulaQron.virtnode.crudeSimulator.simpleEngine import *
 
+from flow import circuit_file_to_flow, count_qubits_in_sequence
+
 # Initialize the connection
 with CQCConnection("client") as client:
 

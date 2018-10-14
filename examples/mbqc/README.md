@@ -30,7 +30,9 @@ The file contains a single JSON object:
 | qubits | list of strings or ints | lists qubits the gate is applied to (2nd qubit is not necessary for H, X or Z) |
 
 
-## Running example
+## Running Client and Server
+
+We have a working UBMQC implementation with one client and one server. Please run the following:
 
 ```bash
 git clone https://github.com/cgmcintyr/SimulaQron.git

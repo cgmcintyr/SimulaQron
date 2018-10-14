@@ -11,15 +11,20 @@ from flow import circuit_file_to_flow, count_qubits_in_sequence
 from angle import measure_angle
 import struct
 
+# Load circuit from JSON file
 seq_out = circuit_file_to_flow("./circuits/circuit1.json")
+
+# Determine number of cubits our circuit needs
 nQubits = count_qubits_in_sequence(seq_out)
 print("qubits needed: {}".format(nQubits))
 print("----- out -----")
 
+# Initialize measurements count and entanglement lists
 nMeasurement = 0
 E1 = []
 E2 = []
 
+# We use the flow sequence to build entanglemtn lists and count measurements
 for s in seq_out:
     s.printinfo()
     if s.type == "E":
@@ -29,14 +34,10 @@ for s in seq_out:
         nMeasurement += 1
         # s.qubit
 
-
-print(E1, E2)
-
-
-print("Qubit number=", nQubits)
-
+# Outcome of each qubit will be stored in this outcome list
 outcome = nQubits * [-1]
-# Initialize the connection
+
+
 with CQCConnection("client") as client:
     print("Sending: Create {} qubits".format(nQubits))
     client.sendClassical("server", nQubits)
@@ -48,7 +49,6 @@ with CQCConnection("client") as client:
         q = qubit(client)
         q.rot_Y(64)  # |+> state
         q.rot_Z(rand_angle)
-
         print("Sending qubit: {} to {}".format(i+1, "server"))
         client.sendQubit(q, "server")
 
@@ -64,27 +64,34 @@ with CQCConnection("client") as client:
 
     for s in seq_out:
         if s.type == "M":
+            # Which qubit are we measuring?
             qubit_n = s.qubit
+
+            # What is the angle we wish to measure
             computation_angle = s.angle
             input_angle = angles[qubit_n]
+
+            # Calclate the angle to send with randomisation applied
             r = np.round(random.random())
             angle_to_send = measure_angle(
                 qubit_n, seq_out, outcome, input_angle, computation_angle
             ) + r * (np.pi)
-            time.sleep(1)
+
             print("Sending: ask to measure qubit {}".format(qubit_n))
-            client.sendClassical("server", qubit_n)
             time.sleep(1)
+            client.sendClassical("server", qubit_n)
+
             print("Sending: measurement angle {}".format(angle_to_send))
+            time.sleep(1)
             client.sendClassical("server", angle_to_send)
+
             m = int.from_bytes(client.recvClassical(), "little")
             print("Received: result {}".format(m))
+
+            # We adjust for the randomness only we know we added
             if r == 1:
                 outcome[qubit_n - 1] = 1 - m
             else:
                 outcome[qubit_n - 1] = m
 
     print("Output of circuit: {}".format(outcome))
-    # s.qubit
-
-    # m=q.measure()

@@ -37,6 +37,7 @@ We have a working UBMQC implementation with one client and one server. Please ru
 ```bash
 git clone https://github.com/cgmcintyr/SimulaQron.git
 cd SimulaQron
+git checkout develop
 export PYTHONPATH=$(pwd):$PYTHONPATH
 export NETSIM=$(pwd)
 ./run/startAll.sh

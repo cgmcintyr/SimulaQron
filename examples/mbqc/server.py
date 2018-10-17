@@ -28,7 +28,11 @@ with CQCConnection("Charlie") as Server:
     # Client next defines the number of measurments to be performed
     nMeasurement = Server.recvClassical()
     nMeasurement = int.from_bytes(nMeasurement, byteorder="little")
-    print("Server Received (classical): Client asking to perform {} measurements".format(nQubits))
+    print(
+        "Server Received (classical): Client asking to perform {} measurements".format(
+            nQubits
+        )
+    )
 
     # First step of MBQC is entangling qubits into a graph state
     E1 = Server.recvClassical()

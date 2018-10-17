@@ -131,7 +131,7 @@ if __name__ == "__main__":
     gates = result["gates"]
     qubits = result["qubits"]
     conditions = result["conditions"]
-    print("gates     :  {}".format(', '.join(gates)))
+    print("gates     :  {}".format(", ".join(gates)))
     print("qubits1   : {}".format(qubits[0]))
     print("qubits2   : {}".format(qubits[1]))
     print("conditions: {}".format(conditions))

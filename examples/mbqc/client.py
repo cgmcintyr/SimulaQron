@@ -13,8 +13,8 @@ from flow import circuit_file_to_flow, count_qubits_in_sequence
 from angle import measure_angle
 
 # Randomly select circuit from circuits directory
-circuits_path = Path('.') / 'circuits'
-circuit_file_paths = list(circuits_path.glob('*.json'))
+circuits_path = Path(".") / "circuits"
+circuit_file_paths = list(circuits_path.glob("*.json"))
 circuit = random.choice(circuit_file_paths)
 
 # Load circuit as MBQC flow
@@ -54,7 +54,7 @@ with CQCConnection("Bob") as client:
         q = qubit(client)
         q.rot_Y(64)  # |+> state
         q.rot_Z(rand_angle)
-        print("Client Sending (quantum): qubit {}".format(i+1))
+        print("Client Sending (quantum): qubit {}".format(i + 1))
         client.sendQubit(q, server_name)
 
     time.sleep(1)
@@ -86,7 +86,9 @@ with CQCConnection("Bob") as client:
             time.sleep(1)
             client.sendClassical(server_name, qubit_n)
 
-            print("Client Sending (classical): measurement angle {}".format(angle_to_send))
+            print(
+                "Client Sending (classical): measurement angle {}".format(angle_to_send)
+            )
             time.sleep(1)
             client.sendClassical(server_name, angle_to_send)
 

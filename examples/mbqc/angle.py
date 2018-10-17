@@ -1,4 +1,6 @@
 import numpy as np
+
+
 def measure_angle(i, seq, outcome_array, input_angle, computation_angle):
     """Angle to measrue qubit i
 

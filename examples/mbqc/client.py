@@ -37,10 +37,12 @@ for s in seq_out:
 # Outcome of each qubit will be stored in this outcome list
 outcome = nQubits * [-1]
 
+server_name = "Charlie"
 
-with CQCConnection("client") as client:
+
+with CQCConnection("Bob") as client:
     print("Sending: Create {} qubits".format(nQubits))
-    client.sendClassical("server", nQubits)
+    client.sendClassical(server_name, nQubits)
 
     angles = []
     for i in range(0, nQubits):
@@ -49,18 +51,18 @@ with CQCConnection("client") as client:
         q = qubit(client)
         q.rot_Y(64)  # |+> state
         q.rot_Z(rand_angle)
-        print("Sending qubit: {} to {}".format(i+1, "server"))
-        client.sendQubit(q, "server")
+        print("Sending qubit: {} to {}".format(i+1, server_name))
+        client.sendQubit(q, server_name)
 
     time.sleep(1)
     print("Sending: Ask to perform {} measurements".format(nQubits))
-    client.sendClassical("server", nMeasurement)
+    client.sendClassical(server_name, nMeasurement)
     time.sleep(1)
     print("Sending: List of 1st Qubits to Entangle".format(nQubits))
-    client.sendClassical("server", E1)
+    client.sendClassical(server_name, E1)
     time.sleep(1)
     print("Sending: List of 2nd Qubits to Entangle".format(nQubits))
-    client.sendClassical("server", E2)
+    client.sendClassical(server_name, E2)
 
     for s in seq_out:
         if s.type == "M":
@@ -79,11 +81,11 @@ with CQCConnection("client") as client:
 
             print("Sending: ask to measure qubit {}".format(qubit_n))
             time.sleep(1)
-            client.sendClassical("server", qubit_n)
+            client.sendClassical(server_name, qubit_n)
 
             print("Sending: measurement angle {}".format(angle_to_send))
             time.sleep(1)
-            client.sendClassical("server", angle_to_send)
+            client.sendClassical(server_name, angle_to_send)
 
             m = int.from_bytes(client.recvClassical(), "little")
             print("Received: result {}".format(m))

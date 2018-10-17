@@ -12,9 +12,10 @@ qubits = []
 num_measurements = 4
 outcome = []
 
+client_name = "Bob"
 
 
-with CQCConnection("server") as Server:
+with CQCConnection("Charlie") as Server:
     # Client first defines number of qubits needed for their circuit
     nQubits = Server.recvClassical()
     nQubits = int.from_bytes(nQubits, byteorder="little")
@@ -55,4 +56,4 @@ with CQCConnection("server") as Server:
 
         time.sleep(1)
         print("Sending result of measurement to client")
-        Server.sendClassical("client", m)
+        Server.sendClassical(client_name, m)

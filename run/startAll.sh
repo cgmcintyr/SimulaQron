@@ -1,9 +1,9 @@
-#!/usr/bin/env sh
-ALL_PIDS=$(ps aux | grep python | grep -E "Test|setup|start|server|client" | awk {'print $2'})
+!/usr/bin/env sh
+ALL_PIDS=$(ps aux | grep python | grep -E "Test|setup|start" | awk {'print $2'})
 if [ "$ALL_PIDS" != "" ]
 then
-        sudo kill -9 $ALL_PIDS
-fi       
+        kill -9 $ALL_PIDS
+fi
 
 # if no arguments were given we take the list of current Nodes
 if [ "$#" -eq 0 ] ;

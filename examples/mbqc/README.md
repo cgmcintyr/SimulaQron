@@ -31,8 +31,6 @@ python client.py
 
 ## Client/Server
 
-To run the client and server use `run.sh`.
-
 ### Client Design
 
 The client will load a random circuit from the `circuits` directory. This circuit describes a computation the client wishes to perform.
@@ -75,3 +73,18 @@ The file contains a single JSON object:
 | name   | string                  | name of gate to be created (does not have to be unique)                        |
 | type   | string                  | "H", "CZ", "CX", "Z", or "X" (no other gates supported)                        |
 | qubits | list of strings or ints | lists qubits the gate is applied to (2nd qubit is not necessary for H, X or Z) |
+
+
+## Authors
+
+This example was created at the RIPE NCC Quantum Internet Hackathon 2018 by Team aMBiQuiCy.
+
+The team members were:
+
+* Georg Harder
+* Andrey Hoursanov
+* Marc Ibrahim
+* Yao Ma
+* Anne Marin
+* Christopher McIntyre
+* Shraddha Singh

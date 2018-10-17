@@ -1,4 +1,4 @@
 #!/bin/sh
 
-python aliceTest.py &
-python bobTest.py &
+python server.py &
+python client.py &

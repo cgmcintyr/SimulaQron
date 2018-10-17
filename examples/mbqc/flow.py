@@ -28,13 +28,13 @@ class Gate:
 
     def printinfo(self):
         if self.type == "E":
-            print(self.type, self.qubits)
+            print("\t", self.type, self.qubits)
         elif self.type == "M":
-            print(self.type, self.qubit, self.angle, self.X_idxs, self.Z_idxs)
+            print("\t", self.type, self.qubit, self.angle, self.X_idxs, self.Z_idxs)
         elif self.type == "X":
-            print(self.type, self.qubit, self.power_idx)
+            print("\t", self.type, self.qubit, self.power_idx)
         elif self.type == "Z":
-            print(self.type, self.qubit, self.power_idx)
+            print("\t", self.type, self.qubit, self.power_idx)
 
 
 def _measurement_dictionary_to_sequence(dictionary):

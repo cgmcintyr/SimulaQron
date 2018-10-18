@@ -1,11 +1,10 @@
-# Universal Blind Quantum Computation
+# Universal Blind Quantum Computation (UBQC)
 
-This directory contains a client/server example of UBQC which is built on top of MBQC (measurement based quantum computation).
-
+The directory contains SimulaQron code for UBQC protocol for a partially quantum client (one who can prepare and send states) and single quantum server. It includes a classical subroutine to translate a quantum circuit into measuremnent language (meaurement.py) and hence convert it according to flow construction devised by  Elham Kashefi and Vincent Danos (flow.py). The output is then interpreted using UBQC protocol on the client side to assign (delegate) a full-fledged secret quantum computation to an all powerful quantum server. 
 
 ## MBQC
 
-Interpret Flow notations MBQC as follows. There are four kinds of outputs:
+This subroutine takes input as decribed in the JSON file in the same repository described below. MBQC subroutine is composed of two functions, measurement.py and flow.py. The final output of the subroutine can be interpreted as follows:  
 
 * E [i,j]: entangle qubits i and j using Controlled Phase. 
 * M i <img src="./docs/svgs/f50853d41be7d55874e952eb0d80c53e.svg" align=middle width=9.794565000000006pt height=22.831379999999992pt/> [m] [n]: Measurement angle for qubit i is <img src="./docs/svgs/5fc34debe9fe8c2254296f70d46bf923.svg" align=middle width=178.268805pt height=29.19113999999999pt/>
@@ -39,10 +38,10 @@ Firstly the client converts the circuit into their measurement equivalents (see 
 
 The client then communicates with the server.
 
-1. The client requests the server to reserve the number of qubits required for the measurements.
-2. The client sends the entanglements for the server to perform on the reserved qubits.
-3. The client sends one measurement at a time, randomly adding an adjustment to the angle of measurement. The client will make adjustments to their output to undo the random angle adjustments. This is done to ensure the server can never be sure what angle the client is truly interested in.
-4. The client prints the output of it's computation.
+1. Client requests the server to reserve the number of random input qubits required for the measurements. Random qubits are introduced to hide the computation angle form the server
+2. Client sends the entanglement information (from the output of MBQC subroutine) for the server to perform on the reserved qubits.
+3. Client sends one measurement at a time, randomly adding an adjustment to the angle of measurement.  This is done to hide the output from the server. The client will make adjustments to their output to undo the random angle adjustments.
+4. Client prints the output of its computation using the received classcial measurement outcome results.
 
 ### Server Design
 
@@ -81,10 +80,10 @@ This example was created at the RIPE NCC Quantum Internet Hackathon 2018 by Team
 
 The team members were:
 
-* Georg Harder
 * Andrey Hoursanov
-* Marc Ibrahim
-* Yao Ma
 * Anne Marin
 * Christopher McIntyre
+* Georg Harder
+* Marc Ibrahim
 * Shraddha Singh
+* Yao Ma

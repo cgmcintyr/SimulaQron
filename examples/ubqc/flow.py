@@ -1,7 +1,6 @@
 import numpy as np
-from measurement import load_and_convert_circuit
+from SimulaQron.examples.ubqc.measurement import load_and_convert_circuit
 from copy import deepcopy
-
 
 class Gate:
     """Represents gate being applied to qubits/conditions"""
@@ -59,9 +58,8 @@ def _construct_flow_from_sequence(seq):
     N = len(seq)
     i = 1
     while i < N:
-        # print(i)
         if seq[i].type == "E":
-            if seq[i - 1].type == "E":
+            if (seq[i - 1].type == "E") | (i==0):
                 i = i + 1
                 continue
 
@@ -133,13 +131,16 @@ def count_qubits_in_sequence(seq):
 
 def circuit_file_to_flow(path):
     result = load_and_convert_circuit(path)
+    #print(result)
     seq_in = _measurement_dictionary_to_sequence(result)
+    #for s in seq_in:
+    #    s.printinfo()
     seq_out = _construct_flow_from_sequence(seq_in)
     return seq_out
 
 
 if __name__ == "__main__":
-    seq_out = circuit_file_to_flow("./circuits/circuit2.json")
+    seq_out = circuit_file_to_flow("./circuits/circuittmp.json")
     qubits_needed = count_qubits_in_sequence(seq_out)
     print("qubits needed: {}".format(qubits_needed))
     print("----- out -----")

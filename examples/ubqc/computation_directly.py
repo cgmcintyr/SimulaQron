@@ -39,13 +39,13 @@ def do_clean_circuit(name, nGates, gates, qubits1, qubits2, nqbits):
         if gates[i] == "H":
             q[qubits1[i] - 1].H()
         if gates[i] == "CZ":
-            q[qubits2[i] - 1].cphase(q[qubits1[i] - 1])
+            q[qubits1[i] - 1].cphase(q[qubits2[i] - 1])
         if gates[i] == "X":
             q[qubits1[i] - 1].X()
         if gates[i] == "Z":
             q[qubits1[i] - 1].Z()
         if gates[i] == "CX":
-            q[qubits2[i] - 1].cnot(q[qubits1[i] - 1])
+            q[qubits1[i] - 1].cnot(q[qubits2[i] - 1])
 
     for i in range(0, nqbits):
         m = q[i].measure()
@@ -54,7 +54,7 @@ def do_clean_circuit(name, nGates, gates, qubits1, qubits2, nqbits):
 
 
 if __name__ == "__main__":
-    result = load_circuit("./circuits/circuit4.json")
+    result = load_circuit("./circuits/circuit1.json")
     nGates = result[0]
     gates = result[1]
     qubits1 = result[2]
@@ -67,13 +67,13 @@ if __name__ == "__main__":
     print("nqbits:", nqbits)
 
     # Initialise CQC connection
-    Alice = CQCConnection("Alice")
-    # q = qubit(Alice)
-    # q.X()
-    # result = Alice.tomography(qubit, 10)
-    # q.H()
-    # result = q.measure()
-    # print("result:", result)
-    do_clean_circuit(Alice, nGates, gates, qubits1, qubits2, nqbits)
+    with CQCConnection("Alice") as Alice:
+        # q = qubit(Alice)
+        # q.X()
+        # result = Alice.tomography(qubit, 10)
+        # q.H()
+        # result = q.measure()
+        # print("result:", result)
+        do_clean_circuit(Alice, nGates, gates, qubits1, qubits2, nqbits)
 
-    Alice.close()
+        Alice.close()

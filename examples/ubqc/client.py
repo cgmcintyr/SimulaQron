@@ -10,7 +10,7 @@ from SimulaQron.cqc.backend.cqcHeader import *
 from SimulaQron.cqc.pythonLib.cqc import *
 
 from flow import circuit_file_to_flow, count_qubits_in_sequence
-from angle import measure_angle
+from angle import measure_angle2
 
 # Randomly select circuit from circuits directory
 circuits_path = Path(".") / "circuits"
@@ -78,9 +78,8 @@ with CQCConnection("Bob") as client:
 
             # Calclate the angle to send with randomisation applied
             r = np.round(random.random())
-            angle_to_send = measure_angle(
-                qubit_n, seq_out, outcome, input_angle, computation_angle
-            ) + r * (np.pi)
+            #angle_to_send = measure_angle(qubit_n, seq_out, outcome, input_angle, computation_angle) + r * (np.pi)
+            angle_to_send = measure_angle2(s, outcome, input_angle) + r * (np.pi)
 
             print("Client Sending (classical): ask to measure qubit {}".format(qubit_n))
             time.sleep(1)

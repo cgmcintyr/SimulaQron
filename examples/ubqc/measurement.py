@@ -77,9 +77,9 @@ def _convert_to_measurements(obj, gates, qubits, qubit_count):
         )
     elif gate == "CX":
         # Defer conversion to next iterations
-        gates += ["H", "CZ", "H"]
-        qubits[0] += [q2, q1, q2]
-        qubits[1] += [0, q2, 0]
+        gates = ["H", "CZ", "H"] + gates
+        qubits[0] = [q2, q1, q2] + qubits[0]
+        qubits[1] = [0, q2, 0] + qubits[1]
 
         new_gates = []
         new_conditions = []
@@ -127,7 +127,7 @@ def load_and_convert_circuit(path):
 
 
 if __name__ == "__main__":
-    result = load_and_convert_circuit("./circuits/circuit2.json")
+    result = load_and_convert_circuit("./circuits/circuittmp.json")
     gates = result["gates"]
     qubits = result["qubits"]
     conditions = result["conditions"]

@@ -140,7 +140,7 @@ def circuit_file_to_flow(path):
 
 
 if __name__ == "__main__":
-    seq_out = circuit_file_to_flow("./circuits/circuittmp.json")
+    seq_out = circuit_file_to_flow("./circuits/circuitRZ.json")
     qubits_needed = count_qubits_in_sequence(seq_out)
     print("qubits needed: {}".format(qubits_needed))
     print("----- out -----")

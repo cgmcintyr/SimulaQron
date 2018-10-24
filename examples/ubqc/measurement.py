@@ -38,6 +38,13 @@ def _convert_gate_z(q1, q2, qubit_count):
     conditions = [0]
     return gates, qubits, conditions, qubit_count
 
+def _convert_gate_j(q1, q2, qubit_count, angle):
+    new_qubit = qubit_count + 1
+    qubits = [[q1, q1, new_qubit], [new_qubit, 0, 0]]
+    gates = ["E","M","X"]
+    conditions = [0, -angle%256, q1] 
+    return gates, qubits, conditions, new_qubit
+
 
 def _replace_qubit(qubits, old, new):
     qubits = deepcopy(qubits)
@@ -48,7 +55,7 @@ def _replace_qubit(qubits, old, new):
     return qubits
 
 
-def _convert_to_measurements(obj, gates, qubits, qubit_count):
+def _convert_to_measurements(obj, gates, qubits, qubit_count, angles):
     if len(gates) == 0:
         return obj
 
@@ -75,6 +82,14 @@ def _convert_to_measurements(obj, gates, qubits, qubit_count):
         new_gates, new_qubits, new_conditions, new_qubit_count = _convert_gate_z(
             q1, q2, qubit_count
         )
+    elif gate == "J":
+        angle = angles.pop(0)
+        new_gates, new_qubits, new_conditions, new_qubit_count = _convert_gate_j(
+            q1, q2, qubit_count,angle
+        )
+        if new_qubit_count != qubit_count:
+            qubits = _replace_qubit(qubits, q1, new_qubit_count)
+            qubit_count = new_qubit_count
     elif gate == "CX":
         # Defer conversion to next iterations
         gates = ["H", "CZ", "H"] + gates
@@ -84,6 +99,18 @@ def _convert_to_measurements(obj, gates, qubits, qubit_count):
         new_gates = []
         new_conditions = []
         new_qubits = [[], []]
+
+    elif (gate == "T") | (gate == "R_Z"):
+        # Defer conversion to next iterations
+        gates = ["J", "H"] + gates
+        qubits[0] = [q1, q1] + qubits[0]
+        qubits[1] = [0, 0] + qubits[1]
+
+        new_gates = []
+        new_conditions = []
+        new_qubits = [[], []]
+
+
     else:
         print("ERROR {}".format(gate))
         sys.exit(1)
@@ -92,12 +119,13 @@ def _convert_to_measurements(obj, gates, qubits, qubit_count):
     obj["qubits"][0] += new_qubits[0]
     obj["qubits"][1] += new_qubits[1]
     obj["conditions"] += new_conditions
-    return _convert_to_measurements(obj, gates, qubits, qubit_count)
+    # obj["angles"] += new_angles
+    return _convert_to_measurements(obj, gates, qubits, qubit_count, angles)
 
 
-def convert_to_measurements(gates, qubits, qubit_count):
-    empty = {"gates": [], "qubits": [[], []], "conditions": []}
-    return _convert_to_measurements(empty, gates, qubits, qubit_count)
+def convert_to_measurements(gates, qubits, qubit_count, angles):
+    empty = {"gates": [], "qubits": [[], []], "conditions": [], "angles": []}
+    return _convert_to_measurements(empty, gates, qubits, qubit_count, angles)
 
 
 def load_circuit(path):
@@ -108,6 +136,7 @@ def load_circuit(path):
     qubits = []
     qubits_1 = []
     qubits_2 = []
+    angles = []
     for g in range(0, nGates):
         qubits = qubits + circuit["gates"][g]["qbits"]
         qubits_1 = qubits_1 + [int(circuit["gates"][g]["qbits"][0])]
@@ -116,9 +145,14 @@ def load_circuit(path):
         else:
             qubits_2 = qubits_2 + [int(circuit["gates"][g]["qbits"][1])]
         gates = gates + [circuit["gates"][g]["type"]]
+        if gates[g] == 'T' :
+            angles = angles + [32]
+        if gates[g] == 'R_Z':
+            angles = angles + [int(circuit["gates"][g]["angle"])]
+
 
     nqbits = len(set(qubits))
-    return gates, [qubits_1, qubits_2], nqbits
+    return gates, [qubits_1, qubits_2], nqbits, angles
 
 
 def load_and_convert_circuit(path):
@@ -127,7 +161,7 @@ def load_and_convert_circuit(path):
 
 
 if __name__ == "__main__":
-    result = load_and_convert_circuit("./circuits/circuittmp.json")
+    result = load_and_convert_circuit("./circuits/circuitRZ.json")
     gates = result["gates"]
     qubits = result["qubits"]
     conditions = result["conditions"]

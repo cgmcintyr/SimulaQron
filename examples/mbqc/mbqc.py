@@ -89,15 +89,17 @@ if __name__ == "__main__":
 			
 			# generate the input qubits for the circuit
 			q1 = qubit(Alice)
-			q2 = qubit(Alice)
+			#q2 = qubit(Alice)
 			q1.H()
 			
 			#out = mbqc(Alice, "../ubqc/circuits/CNOT.json", [q1, q2])
-			out = mbqc(Alice, "../ubqc/circuits/circuit3.json", [q1, q2])
+			#out = mbqc(Alice, "../ubqc/circuits/circuitRZ.json", [q1, q2])
+			out = mbqc(Alice, "../ubqc/circuits/circuitRZ.json", [q1])
 
 			# measure the output qubits
 			final_result = []
 			for q in out:
+				q.rot_X(64)
 				final_result.append(q.measure())
 			
 			print('MBQC outcome:', final_result)
